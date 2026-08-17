@@ -1,0 +1,23 @@
+# Ejecutables
+*.exe
+*.out
+*.app
+
+# Archivos objeto
+*.o
+*.obj
+
+# Debug
+*.dSYM/
+*.stackdump
+
+# Carpetas de compilación
+build/
+bin/
+
+# VS Code
+.vscode/
+
+# Archivos temporales
+*.tmp
+*~
