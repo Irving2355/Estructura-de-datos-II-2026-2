@@ -26,5 +26,6 @@ int main(){
 
     raiz->izquierdo->izquierdo = crearNodo('D');
     raiz->derecho->derecho = crearNodo('E');
+    //comentario de prueba
     return 0;
 }
