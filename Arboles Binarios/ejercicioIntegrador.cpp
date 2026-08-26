@@ -111,6 +111,98 @@ void generarPostfija(
     expresion.push_back(nodo->dato);
 }
 
+double evaluar(Nodo* nodo){
+    if(
+        nodo->izquierdo == nullptr &&
+        nodo->derecho == nullptr
+    ){
+        return stod(nodo->dato);
+    }
+
+    double izq = evaluar(nodo->izquierdo);
+    double der = evaluar(nodo->derecho);
+
+    if(nodo->dato == "+"){
+        return izq + der;
+    }
+
+    if(nodo->dato == "-"){
+        return izq - der;
+    }
+
+    if(nodo->dato == "*"){
+        return izq * der;
+    }
+
+    if(nodo->dato == "/"){
+        return izq / der;
+    }
+
+    return 0;
+
+    /*switch(nodo->dato){
+        case '+': return izq + der;
+                  break;
+    }*/
+}
+
+void mostrar(
+    const vector<string>& datos
+){
+    for(const string& dato: datos){
+        cout << dato << " ";
+    }
+    cout << endl;
+}
+
+void liberarMemoria(Nodo* nodo){
+    if(nodo == nullptr){
+        return;
+    }
+
+    liberarMemoria(nodo->izquierdo);
+    liberarMemoria(nodo->derecho);
+
+    cout << "Liberando nodo: "
+         << nodo->dato
+         << endl;
+    delete nodo;
+}
+
 int main(){
+
+    Nodo* raiz = crearNodo("*");
+    raiz->izquierdo = crearNodo("+");
+    raiz->derecho = crearNodo("-");
+    raiz->izquierdo->izquierdo = crearNodo("8");
+    raiz->izquierdo->derecho = crearNodo("4");
+
+    raiz->derecho->izquierdo = crearNodo("10");
+    raiz->derecho->derecho = crearNodo("6");
+
+    vector<string> prefija;
+    generarPrefija(raiz,prefija);
+
+    vector<string> postfija;
+    generarPostfija(raiz,postfija);
+
+    string infija = generarInfija(raiz);
+
+    cout << "Expresion original: "<< endl;
+    cout << infija << endl;
+
+    cout << "Notacion prefija: " << endl;
+    mostrar(prefija);
+
+    cout << "Notacion postfija: " << endl;
+    mostrar(postfija);
+
+    double res = evaluar(raiz);
+
+    cout << "Resultado de la expresion: "<<endl;
+    cout << res << endl;
+
+    liberarMemoria(raiz);
+    raiz = nullptr;
     return 0;
 }
