@@ -43,6 +43,47 @@ Nodo* construirDesdeVector(
     return nodo;
 }
 
+vector<vector<int>> obtenerNiveles(
+    Nodo* raiz
+){
+    vector<vector<int>> niveles;
+
+    if(raiz == nullptr){
+        return niveles;
+    }
+
+    queue<Nodo*> cola;
+
+    cola.push(raiz);
+
+    while (!cola.empty())
+    {
+        int cantidadNivel = cola.size();
+
+        vector<int> nivel;
+
+        for(int i=0; i<cantidadNivel; i++){
+            Nodo* actual = cola.front();
+
+            cola.pop();
+
+            nivel.push_back(
+                actual->dato
+            );
+
+            if(actual->izquierdo != nullptr){
+                cola.push(actual->izquierdo);
+            }
+
+            if(actual->derecho != nullptr){
+                cola.push(actual->derecho);
+            }
+        }//fin for
+        niveles.push_back(nivel);
+    }//fin while
+    return niveles;
+}
+
 
 int main(){
     vector<int> datos = {
