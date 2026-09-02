@@ -90,6 +90,99 @@ void mostrarPorNiveles(
     }//fin del while
 }
 
+bool buscar(
+    Nodo* raiz,
+    int valor,
+    int& comparaciones
+){
+    if(raiz == nullptr){
+        return false;
+    }
+
+    comparaciones++;
+
+    if(valor == raiz->dato){
+        return true;
+    }
+
+    if(valor < raiz->dato){
+        return buscar(
+            raiz->izquierdo,
+            valor,
+            comparaciones
+        );
+    }
+
+    return buscar(
+        raiz->derecho,
+        valor,
+        comparaciones
+    );
+}
+
+Nodo* minimo(Nodo* raiz){
+    if(raiz == nullptr){
+        return nullptr;
+    }
+
+    while (raiz->izquierdo != nullptr)
+    {
+        raiz = raiz->izquierdo;
+    }
+    return raiz;
+}
+
+Nodo* maximo(Nodo* raiz){
+    if(raiz == nullptr){
+        return nullptr;
+    }
+
+    while (raiz->derecho != nullptr)
+    {
+        raiz = raiz->derecho;
+    }
+    return raiz;
+}
+
+Nodo* eliminar(
+    Nodo* raiz,
+    int valor
+){
+    if(raiz == nullptr){
+        return nullptr;
+    }
+
+    if(valor < raiz->dato){
+        raiz->izquierdo = eliminar(raiz->izquierdo,valor);
+    }else if(valor > raiz->dato){
+        raiz->derecho = eliminar(raiz->derecho, valor);
+    }else{
+        //caso 1 no tiene hijo izq
+        if(raiz->izquierdo == nullptr){
+            Nodo* temp = raiz->derecho;
+            delete raiz;
+            return temp;
+        }
+
+        //caso 2 solo hijo a la izq
+        if(raiz->derecho == nullptr){
+            Nodo* temp = raiz->izquierdo;
+            delete raiz;
+            return temp;
+        }
+
+        //caso 3 tiene 2 hijos
+        Nodo* sucesor = minimo(raiz->derecho);
+
+        raiz->dato = sucesor->dato;
+        raiz->derecho = eliminar(
+            raiz->derecho,
+            sucesor->dato);
+    }
+
+    return raiz;
+}
+
 int main(){
     setlocale(LC_ALL, "spanish");
     cout << "ñóáéú";
@@ -111,5 +204,18 @@ int main(){
     cout << "Arbol original: " << endl;
     mostrarPorNiveles(raiz);
     cout << endl << endl;
+
+    cout << "buscamos un nodo: 90"<< endl;
+    int comparaciones;
+    bool encontro = buscar(raiz,90,comparaciones);
+    if(encontro == true){
+        cout << "Si se encontro el 90 despues de " << comparaciones<<endl;
+    }else{
+        cout << "no se encontro."<<endl;
+    }
+
+    cout << "Se elimnina el nodo 90" << endl;
+    raiz = eliminar(raiz,90);
+    mostrarPorNiveles(raiz);
     return 0;
 }
