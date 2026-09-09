@@ -45,6 +45,105 @@ int factorBalance(NodoAVL* nodo){
     obtenerAltura(nodo->derecho);
 }
 
+NodoAVL* rotacionDerecha(
+    NodoAVL* y
+){
+    cout << "Rotacion derecha sobre "
+    << y->dato << endl;
+
+    NodoAVL* x = y->izquierdo;
+
+    NodoAVL* subArbolTemporal = x->derecho;
+
+    //realizamos la rotacion
+    x->derecho = y;
+    y->izquierdo = subArbolTemporal;
+
+    //actualizar alturas
+    actualizarAltura(y);
+    actualizarAltura(x);
+
+    return x;
+}
+
+NodoAVL* rotacionIzquierda(
+    NodoAVL* x
+){
+    cout << "Rotacion izquierda sobre "
+    << x->dato << endl;
+    
+    NodoAVL* y = x->derecho;
+    NodoAVL* subArbolTemporal = y->izquierdo;
+
+    //rotacion
+    y->izquierdo = x;
+    x->derecho = subArbolTemporal;
+
+    actualizarAltura(x);
+    actualizarAltura(y);
+    return y;
+}
+
+NodoAVL* insertarAVL(
+    NodoAVL* raiz,
+    int valor
+){
+    if(raiz == nullptr){
+        cout << "insertando " << valor << endl;
+        return crearNodo(valor);
+    }
+
+    if(valor < raiz->dato){
+        raiz->izquierdo = insertarAVL(
+            raiz->izquierdo,
+            valor);
+    }else if(valor > raiz->dato){
+        raiz->derecho = insertarAVL(
+            raiz->derecho,
+            valor
+        );
+    }else{
+        return raiz;
+    }
+
+    //actualizar su altura
+    actualizarAltura(raiz);
+
+    //revisar el balance
+    int balance = factorBalance(raiz);
+    //caso LL
+    if(balance > 1 &&
+    valor < raiz->izquierdo->dato){
+        cout << "Caso LL " << raiz->dato << endl;
+        return rotacionDerecha(raiz);
+    }
+
+    //caso RR
+    if(balance < -1 &&
+    valor > raiz->derecho->dato){
+        cout << "Caso RR " << raiz->dato << endl;
+        return rotacionIzquierda(raiz);
+    }
+
+    //caso LR
+    if(balance > 1 &&
+    valor > raiz->izquierdo->dato){
+        cout << "Caso LR " << raiz->dato << endl;
+        raiz->izquierdo = rotacionIzquierda(raiz->izquierdo);
+        return rotacionDerecha(raiz);
+    }
+
+    //caso RL
+    if(balance < -1 &&
+    valor < raiz->derecho->dato){
+        cout << "Caso RL " << raiz->dato << endl;
+        raiz->derecho = rotacionDerecha(raiz->derecho);
+        return rotacionIzquierda(raiz);
+    }
+
+    return raiz;
+}
+
 int main(){
     return 0;
 }
