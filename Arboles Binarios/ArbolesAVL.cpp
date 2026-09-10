@@ -144,6 +144,59 @@ NodoAVL* insertarAVL(
     return raiz;
 }
 
+NodoAVL* construirAVL(
+    const vector<int>& datos
+){
+    NodoAVL* raiz = nullptr;
+    for(int valor : datos){
+        raiz = insertarAVL(raiz,valor);
+        cout << endl;
+    }
+    return raiz;
+}
+
+void mostrarPorNiveles(
+    NodoAVL* raiz
+){
+    if(raiz == nullptr){
+        return;
+    }
+
+    queue<NodoAVL*> cola;
+
+    cola.push(raiz);
+
+    int nivel = 0;
+
+    while(!cola.empty()){
+        int cantidad = cola.size();
+        cout << "Nivel " << nivel << ": ";
+        for(int i=0; i<cantidad; i++){
+            NodoAVL* actual = cola.front();
+            cola.pop();
+
+            cout << actual->dato << "(h= "
+            << actual->altura << ". FB= "
+            << factorBalance(actual) << ")";
+
+            if(actual->izquierdo != nullptr){
+                cola.push(actual->izquierdo);
+            }
+
+            if(actual->derecho != nullptr){
+                cola.push(actual->derecho);
+            }
+        }//fin for
+        cout << endl;
+        nivel++;
+    }//fin del while
+}
+
 int main(){
+
+    vector<int> datos = {1,2,3,4,5,6,7,8};
+    NodoAVL* avl = construirAVL(datos);
+    cout << "Arbol AVL:" << endl;
+    mostrarPorNiveles(avl);
     return 0;
 }
