@@ -138,8 +138,43 @@ public:
             hijos[i]->insertarNoLleno(valor);
         }
     }
-
 };
+
+class ArbolB{
+private:
+    NodoB* raiz;
+    int t;
+public:
+    ArbolB(int gradoMinimo):
+    raiz(nullptr),
+    t(gradoMinimo){
+    }
+
+    ~ArbolB(){
+        delete raiz;
+    }
+
+    void insertar(int valor){
+        if(raiz == nullptr){
+            raiz = new NodoB(t,true);
+
+            raiz->clave.push_back(valor);
+            return;
+        }
+
+        if(raiz->clave.size() 
+        == static_cast<size_t>(2*t-1)){
+            NodoB* nuevaRaiz = new NodoB(
+                t,false
+            );
+
+            nuevaRaiz->hijos.push_back(raiz);
+
+            nuevaRaiz->dividirHijo(0,raiz);
+        }
+    }
+};
+
 
 int main(){
     return 0;
