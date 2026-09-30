@@ -171,11 +171,41 @@ public:
             nuevaRaiz->hijos.push_back(raiz);
 
             nuevaRaiz->dividirHijo(0,raiz);
+
+            int i = 0;
+
+            if(valor > nuevaRaiz->clave[0]){
+                i++;
+            }
+
+            nuevaRaiz->hijos[i]->insertarNoLleno(valor);
+            raiz = nuevaRaiz;
+        }else{
+            raiz->insertarNoLleno(valor);
         }
     }
+
+    void construir(const vector<int>& datos){
+        for(int valor: datos){
+            insertar(valor);
+        }
+    }
+
+    void recorrer(){
+        if(raiz != nullptr){
+            raiz->recorrer();
+        }
+        cout << endl;
+    }
+
 };
 
 
 int main(){
+    vector<int> datos = {10,20,5,6,12,30,7,17,3,4,2,8,9};
+
+    int gradoMinimo = 2;
+    ArbolB arbol(gradoMinimo);
+    arbol.construir(datos);
     return 0;
 }
