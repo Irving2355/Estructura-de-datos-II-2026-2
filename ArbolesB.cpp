@@ -198,6 +198,19 @@ public:
         cout << endl;
     }
 
+    bool buscar(int valor,
+    int& accesoBloque){
+        accesoBloque = 0;
+        if(raiz == nullptr){
+            return false;
+        }
+
+        return raiz->buscar(
+            valor,
+            accesoBloque
+        ) != nullptr;
+    }
+
 };
 
 
@@ -207,5 +220,15 @@ int main(){
     int gradoMinimo = 2;
     ArbolB arbol(gradoMinimo);
     arbol.construir(datos);
+
+    cout << "Datos ordenados\n";
+    arbol.recorrer();
+
+    int accesos = 0;
+    int buscado = 17;
+    cout << "Buscando el 17\n";
+    bool encontrado = arbol.buscar(buscado,accesos);
+    cout << (encontrado ? "Encontrado el 17" : "No encontrado") << endl;
+    cout << "Numero de accesos: " << accesos << endl;
     return 0;
 }
