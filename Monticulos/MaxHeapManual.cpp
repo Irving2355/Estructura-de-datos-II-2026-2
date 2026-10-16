@@ -42,12 +42,10 @@ public:
 
 int main(){
     MaxHeap heap;
-    heap.insertar(50);
-    heap.insertar(30);
-    heap.insertar(70);
-    heap.insertar(20);
-    heap.insertar(40);
-    heap.insertar(90);
+    vector<int> datos = {20,50,10,80,40,70,30};
+    for(int valor:datos){
+        heap.insertar(valor);
+    }
 
     heap.imprimir();
     return 0;
