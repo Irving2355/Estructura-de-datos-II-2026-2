@@ -38,9 +38,34 @@ public:
     }
 
     bool contiene(int clave)const{
-        
+        const size_t inicio = indiceInicial(clave);
+        const size_t m = claves.size();
+        for(size_t intento=0; intento<m; ++intento){
+            const size_t pos = (inicio+intento)%m;
+            if(!ocupado[pos]){
+                return false;
+            }
+            if(claves[pos] == clave) return true;
+        }
+        return false;
+    }
+
+    void mostrar() const{
+        for(size_t i =0; i<claves.size(); ++i){
+            cout << "pos i: " << i << " ";
+            if(ocupado[i]) cout << claves[i]; 
+            else cout << " No hay nada ";
+            cout << endl;
+        }
     }
 };
 
-void main(void){
+int main(void){
+    HashLineal tabla(7);
+    for(int clave : {10,17,26,34}){
+        tabla.insertar(clave);
+    }
+    tabla.mostrar();
+
+    return 0;
 }
