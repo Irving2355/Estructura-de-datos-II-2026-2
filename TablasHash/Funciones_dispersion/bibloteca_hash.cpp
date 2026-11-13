@@ -44,7 +44,75 @@ private:
     }
 
 public:
-    
+    Bibloteca(){
+        libros.max_load_factor(0.75f);
+        libros.rehash(11);
+    }
+
+    bool registrarSocio(int matricula){
+        if(matricula <= 0) return false;
+        return socios.insert(matricula).second;
+    }
+
+    bool agregarLibro(int codigo, const string& titulo, const string& autor){
+        if(codigo <= 0 || titulo.empty() || autor.empty()) return false;
+
+        return libros.try_emplace(codigo, Libro{codigo,titulo,autor}).second;
+    }
+
+    bool actualizarLibro(int codigo, const string& titulo, const string& autor){
+        if(titulo.empty()) return false;
+        auto it = libros.find(codigo);
+        if(it == libros.end()) return false;
+
+        it->second.titulo = titulo;
+        it->second.autor = autor;
+        return true;
+    }
+
+    void buscarLibro(int codigo)const{
+        auto it = libros.find(codigo);
+        if(it == libros.end()){
+            cout << "No esta we\n";
+            return;
+        }
+        imprimirLibro(it->second);
+    }
+
+    bool prestarLibro(int codigo, int matricula){
+        if(socios.find(matricula) == socios.end()) return false;
+        if(codigo.find(codigo) == codigo.end()) return false;
+        if(prestamos.find(codigo) != prestamos.end()) return false;
+
+        prestamos[codigo] = matricula;
+        return true;
+    }
+
+    bool devolverLibro(int codigo){
+        return prestamos.erase(codigo) == 1;
+    }
+
+    bool eliminarLibro(int codigo){
+        if(prestamos.find(codigo) != prestamos.end()) return false;
+        return libros.erase(codigo) == 1;
+    }
+
+    void mostrarCatalogo() const{
+        if(libros.empty()){
+            cout << "No hay libros\n";
+            return;
+        }
+        for(const auto& par : libros){
+            imprimirLibro(par.second);
+        }
+    }
+
+    void mostrarCatalogoOrdenado() const{
+        map<int,Libro> ordenados(libros.begin(), libros.end());
+        for(const auto& [codigo,libro]: ordenados){
+            imprimirLibro(libro);
+        }
+    }
 };
 
 
