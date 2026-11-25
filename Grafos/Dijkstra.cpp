@@ -84,6 +84,53 @@ void bloquearConexion(Grafo& grafo, int a, int b){
     quitar(grafo[b], a);
 }
 
+void mostrarRuta(const Grafo& grafo, int origen, int destino, const vector<string>& nombres){
+    const long long INF = numeric_limits<long long>::max()/4;
+    Resultado resultado = dijkstra(grafo,origen);
+
+    if(resultado.distancia[destino] == INF){
+        cout << "\nNo existe el camino\n";
+        return;
+    }
+
+    vector<int> camino = construirCamino(destino,resultado.padre);
+
+    cout << "Ruta: ";
+    for(size_t i=0; i<camino.size(); ++i){
+        if(i>0) cout << " -> ";
+        cout << nombres[camino[i]];
+    }
+    cout << "\n\nCosto total: " << resultado.distancia[destino] << "\n";
+}
+
 int main(){
+    vector<string> nombres={
+        "Craft", "Garden", "Billar", "ChuyBombas",
+        "PlayaMamitas", "CheveChuy", "OXXO", "C4",
+        "Salida"
+    };
+    Grafo grafo(nombres.size());
+    conectar(grafo, 0, 3, 2);
+    conectar(grafo, 4, 1, 4);
+    conectar(grafo, 0, 8, 4);
+    conectar(grafo, 3, 5, 1);
+    conectar(grafo, 3, 1, 7);
+    conectar(grafo, 1, 4, 3);
+    conectar(grafo, 4, 5, 5);
+    conectar(grafo, 6, 7, 0);
+    conectar(grafo, 6, 8, 8);
+
+    cout << "Original\n";
+    mostrarRuta(grafo,0,8,nombres);
+
+    cout << "\nPrueba Craft a PlayaMamitas\n";
+    mostrarRuta(grafo, 0, 4, nombres);
+
+    bloquearConexion(grafo, 3, 5);
+    cout << "\nModificado\n";
+    mostrarRuta(grafo,0,8,nombres);
+    cout << "\nPrueba Craft a PlayaMamitas\n";
+    mostrarRuta(grafo, 0, 4, nombres);
+
     return 0;
 }
